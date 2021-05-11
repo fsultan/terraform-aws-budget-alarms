@@ -1,5 +1,5 @@
-variable "account_name" {
-  description = "Specifies the name of the AWS account"
+variable "budget_name" {
+  description = "Specifies the name of the Budget"
   type        = string
   default     = ""
 }

@@ -45,8 +45,8 @@ locals {
 }
 
 resource "aws_sns_topic" "account_budgets_alarm_topic" {
-  name = "account-budget-alarms-topic"
-
+  #name = "account-budget-alarms-topic"
+  name = replace(lower(var.budget_name), "/[^a-z0-9_-]/", "_")
   tags = var.tags
 }
 
@@ -77,7 +77,7 @@ data "aws_iam_policy_document" "sns_topic_policy" {
 }
 
 resource "aws_budgets_budget" "budget_account" {
-  name              = "${var.account_name} Account Monthly Budget"
+  name              = "${var.budget_name}"
   budget_type       = "COST"
   limit_amount      = var.account_budget_limit
   limit_unit        = var.budget_limit_unit
@@ -106,7 +106,7 @@ resource "aws_budgets_budget" "budget_account" {
 resource "aws_budgets_budget" "budget_resources" {
   for_each = var.services
 
-  name              = "${var.account_name} Account - ${each.key}"
+  name              = "${var.budget_name} - ${each.key}"
   budget_type       = "COST"
   limit_amount      = each.value.budget_limit
   limit_unit        = var.budget_limit_unit
