@@ -6,7 +6,7 @@
 
 ![tfsec](https://github.com/fsultan/terraform-aws-budget-alarms/workflows/tfsec/badge.svg)
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
-<a href="https://github.com/fsultan/web-development-projects/commits/master"><img alt="GitHub last commit" src="https://img.shields.io/github/last-commit/fsultan/terraform-aws-budget-alarms?color=5f3cfa"></a>
+<a href="https://github.com/fsultan/terraform-aws-budget-alarms/commits/master"><img alt="GitHub last commit" src="https://img.shields.io/github/last-commit/fsultan/terraform-aws-budget-alarms?color=5f3cfa"></a>
 
 Terraform module that creates AWS Budgets for your resources on AWS and through the AWS Chatbot integration, enables you to receive the alerts directly into your designated Slack channel.
 
