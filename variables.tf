@@ -9,6 +9,12 @@ variable "account_budget_limit" {
   type        = string
 }
 
+variable "budget_alarm_sns_topic_arn" {
+  description = "Existing SNS topic ARN"
+  type        = string
+  default     = ""
+}
+
 variable "budget_limit_unit" {
   description = "The unit of measurement used for the budget forecast, actual spend, or budget threshold."
   type        = string

@@ -47,17 +47,19 @@ locals {
 }
 
 resource "aws_sns_topic" "account_budgets_alarm_topic" {
-  #name = "account-budget-alarms-topic"
-  name = replace(lower(var.budget_name), "/[^a-z0-9_-]/", "_")
+  count = var.budget_alarm_sns_topic_arn == "" ? 1 : 0
+  name = "${replace(lower(var.budget_name), "/[^a-z0-9_-]/", "_")}_budgets_alarm_topic"
   tags = var.tags
 }
 
 resource "aws_sns_topic_policy" "account_budgets_alarm_policy" {
-  arn    = aws_sns_topic.account_budgets_alarm_topic.arn
-  policy = data.aws_iam_policy_document.sns_topic_policy.json
+  count = var.budget_alarm_sns_topic_arn == "" ? 1 : 0
+  arn    = aws_sns_topic.account_budgets_alarm_topic[0].arn
+  policy = data.aws_iam_policy_document.sns_topic_policy[0].json
 }
 
 data "aws_iam_policy_document" "sns_topic_policy" {
+  count = var.budget_alarm_sns_topic_arn == "" ? 1 : 0
   statement {
     sid    = "AWSBudgetsSNSPublishingPermissions"
     effect = "Allow"
@@ -73,7 +75,7 @@ data "aws_iam_policy_document" "sns_topic_policy" {
     }
 
     resources = [
-      aws_sns_topic.account_budgets_alarm_topic.arn
+      aws_sns_topic.account_budgets_alarm_topic[0].arn
     ]
   }
 }
@@ -95,7 +97,7 @@ resource "aws_budgets_budget" "budget_account" {
       threshold_type      = notification.value.threshold_type
       notification_type   = notification.value.notification_type
       subscriber_sns_topic_arns = [
-        aws_sns_topic.account_budgets_alarm_topic.arn
+        var.budget_alarm_sns_topic_arn != "" ? var.budget_alarm_sns_topic_arn : aws_sns_topic.account_budgets_alarm_topic[0].arn
       ]
     }
   }
@@ -128,7 +130,7 @@ resource "aws_budgets_budget" "budget_resources" {
       threshold_type      = notification.value.threshold_type
       notification_type   = notification.value.notification_type
       subscriber_sns_topic_arns = [
-        aws_sns_topic.account_budgets_alarm_topic.arn
+        var.budget_alarm_sns_topic_arn != "" ? var.budget_alarm_sns_topic_arn : aws_sns_topic.account_budgets_alarm_topic[0].arn
       ]
     }
   }
@@ -195,7 +197,7 @@ resource "aws_cloudformation_stack" "chatbot_slack_configuration" {
     IamRoleArnParameter        = aws_iam_role.chatbot_notification[0].arn
     SlackChannelIdParameter    = var.slack_channel_id
     SlackWorkspaceIdParameter  = var.slack_workspace_id
-    SnsTopicArnsParameter      = aws_sns_topic.account_budgets_alarm_topic.arn
+    SnsTopicArnsParameter      = var.budget_alarm_sns_topic_arn != "" ? var.budget_alarm_sns_topic_arn : aws_sns_topic.account_budgets_alarm_topic[0].arn
   }
 
   tags = var.tags
