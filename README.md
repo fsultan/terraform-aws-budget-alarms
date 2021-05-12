@@ -4,15 +4,15 @@
 
 # AWS Budget Alarms
 
-![tfsec](https://github.com/rribeiro1/terraform-aws-budget-alarms/workflows/tfsec/badge.svg)
+![tfsec](https://github.com/fsultan/terraform-aws-budget-alarms/workflows/tfsec/badge.svg)
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
-<a href="https://github.com/rribeiro1/web-development-projects/commits/master"><img alt="GitHub last commit" src="https://img.shields.io/github/last-commit/rribeiro1/terraform-aws-budget-alarms?color=5f3cfa"></a>
+<a href="https://github.com/fsultan/web-development-projects/commits/master"><img alt="GitHub last commit" src="https://img.shields.io/github/last-commit/fsultan/terraform-aws-budget-alarms?color=5f3cfa"></a>
 
 Terraform module that creates AWS Budgets for your resources on AWS and through the AWS Chatbot integration, enables you to receive the alerts directly into your designated Slack channel.
 
 ### Configure AWS Chatbot / Slack integration
 
-In order to configure the integration between AWS Chatbot and Slack, this module requeires the variables `slack_workspace_id` and `slack_channel_id`.
+In order to configure the integration between AWS Chatbot and Slack, this module requires the variables `slack_workspace_id` and `slack_channel_id`.
 
 #### Slack Workspace ID
 
@@ -31,7 +31,7 @@ module "budget-alarms" {
   source  = "rribeiro1/budget-alarms/aws"
   version = "0.0.7" # verify the last version in the terraform registry
 
-  account_name         = "Development"
+  budget_name         = "Development"
   account_budget_limit = 100.5
 
   services = {
@@ -94,9 +94,11 @@ If you don't want to create the integration between AWS Chatbot and Slack you sh
 | DynamoDB                    | Amazon DynamoDB.                                   |
 | DMS                         | AWS Database Migration Service.                    |
 | ElastiCache                 | Amazon ElastiCache.                                |
+| EFS                         | Amazon Elastic File System.                        |
 | ELB                         | Amazon Elastic Load Balancing.                     |
 | Gateway                     | Amazon API Gateway.                                |
 | Glue                        | AWS Glue.                                          |
+| Guardduty                   | Amazon GuardDuty.                                  |
 | Kafka                       | Managed Streaming for Apache Kafka.                |
 | KMS                         | AWS Key Management Service.                        |
 | Kinesis                     | Amazon Kinesis.                                    |
@@ -151,8 +153,9 @@ No requirements.
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
 | account\_budget\_limit | Set the budget limit for the AWS account | `string` | n/a | yes |
-| account\_name | Specifies the name of the AWS account | `string` | `""` | no |
+| budget\_name | Specifies the budget name | `string` | `""` | no |
 | budget\_limit\_unit | The unit of measurement used for the budget forecast, actual spend, or budget threshold. | `string` | `"USD"` | no |
+| budget\_alarm\_sns\_topic\_arn | Specify a preexisting SNS topic | `string` | n/a | no |
 | budget\_time\_unit | The length of time until a budget resets the actual and forecasted spend. Valid values: `MONTHLY`, `QUARTERLY`, `ANNUALLY`. | `string` | `"MONTHLY"` | no |
 | create\_slack\_integration | Whether to create the Slack integration through AWS Chatbot or not. | `bool` | `true` | no |
 | notifications | Can be used multiple times to configure budget notification thresholds | <pre>map(object({<br>    comparison_operator = string<br>    threshold           = number<br>    threshold_type      = string<br>    notification_type   = string<br>  }))</pre> | n/a | yes |
