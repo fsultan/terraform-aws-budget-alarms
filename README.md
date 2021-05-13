@@ -157,6 +157,7 @@ No requirements.
 | budget\_limit\_unit | The unit of measurement used for the budget forecast, actual spend, or budget threshold. | `string` | `"USD"` | no |
 | budget\_alarm\_sns\_topic\_arn | Specify a preexisting SNS topic | `string` | n/a | no |
 | budget\_time\_unit | The length of time until a budget resets the actual and forecasted spend. Valid values: `MONTHLY`, `QUARTERLY`, `ANNUALLY`. | `string` | `"MONTHLY"` | no |
+| use\_amortized | Specifies whether the budget uses the amortized rate | `bool` | n/a | `false` |
 | create\_slack\_integration | Whether to create the Slack integration through AWS Chatbot or not. | `bool` | `true` | no |
 | notifications | Can be used multiple times to configure budget notification thresholds | <pre>map(object({<br>    comparison_operator = string<br>    threshold           = number<br>    threshold_type      = string<br>    notification_type   = string<br>  }))</pre> | n/a | yes |
 | services | Define the list of services and their limit of budget | <pre>map(object({<br>    budget_limit = string<br>  }))</pre> | n/a | yes |

@@ -88,6 +88,10 @@ resource "aws_budgets_budget" "budget_account" {
   time_unit         = var.budget_time_unit
   time_period_start = "2020-01-01_00:00"
 
+  cost_types {
+    use_amortized = var.use_amortized
+  }
+
   dynamic "notification" {
     for_each = var.notifications
 
@@ -116,6 +120,10 @@ resource "aws_budgets_budget" "budget_resources" {
   limit_unit        = var.budget_limit_unit
   time_unit         = var.budget_time_unit
   time_period_start = "2020-01-01_00:00"
+
+  cost_types {
+    use_amortized = var.use_amortized
+  }
 
   cost_filters = {
     Service = lookup(local.aws_services, each.key)

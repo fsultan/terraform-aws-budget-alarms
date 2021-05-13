@@ -27,6 +27,12 @@ variable "budget_time_unit" {
   default     = "MONTHLY"
 }
 
+variable "use_amortized" {
+  description = "Specifies whether the budget uses the amortized rate"
+  type = bool
+  default = false
+}
+
 variable "services" {
   description = "Define the list of services and their limit of budget"
   type = map(object({
